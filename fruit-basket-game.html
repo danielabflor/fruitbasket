@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Fruit Basket: Understanding AI Tokens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #8b4513;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #d2691e;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .intro-screen {
+            text-align: center;
+        }
+
+        .intro-screen h2 {
+            color: #ff6347;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .metaphor-explanation {
+            background: #fff8dc;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 3px dashed #ffa500;
+        }
+
+        .metaphor-explanation h3 {
+            color: #ff8c00;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .fruit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .fruit-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f8f8 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .fruit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .fruit-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .fruit-name {
+            font-weight: bold;
+            color: #ff6347;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .fruit-description {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .basket {
+            background: #8b4513;
+            border-radius: 20px 20px 50px 50px;
+            padding: 30px;
+            min-height: 200px;
+            margin: 30px 0;
+            position: relative;
+            border: 5px solid #654321;
+        }
+
+        .basket::before {
+            content: "🧺 AI's Basket";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8b4513;
+            padding: 5px 20px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            border: 3px solid #654321;
+        }
+
+        .basket-contents {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding-top: 20px;
+        }
+
+        .fruit-token {
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .fruit-token:hover {
+            transform: scale(1.2) rotate(10deg);
+            background: rgba(255,255,255,0.4);
+        }
+
+        .challenge-area {
+            margin: 30px 0;
+        }
+
+        .sentence-display {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 25px;
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 3px solid #4682b4;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .fruit-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+            padding: 20px;
+            background: #fff9e6;
+            border-radius: 15px;
+        }
+
+        .fruit-option {
+            font-size: 3em;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 15px;
+            background: white;
+            border: 3px solid #ffd700;
+            transition: all 0.3s ease;
+        }
+
+        .fruit-option:hover {
+            transform: scale(1.15);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.4);
+        }
+
+        .fruit-option.selected {
+            background: #ffd700;
+            border-color: #ffa500;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6347, #ff4500);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,99,71,0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .explanation-box {
+            background: linear-gradient(135deg, #e6f3ff 0%, #f0f8ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #4169e1;
+            display: none;
+        }
+
+        .explanation-box.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-box h3 {
+            color: #4169e1;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 2px solid #ddd;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row.header {
+            background: #ff6347;
+            color: white;
+            font-weight: bold;
+        }
+
+        .level-indicator {
+            text-align: center;
+            font-size: 1.3em;
+            color: #ff6347;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .basket-info {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff8dc;
+            border-radius: 12px;
+            border: 2px dashed #ffa500;
+        }
+
+        .basket-count {
+            font-size: 2em;
+            color: #ff6347;
+            font-weight: bold;
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 3px solid #28a745;
+            display: block;
+            animation: bounce 0.6s ease;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 3px solid #dc3545;
+            display: block;
+            animation: shake 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 20px;
+            background: #fff8dc;
+            border-radius: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #ff6347;
+        }
+
+        .stat-label {
+            color: #8b4513;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+
+        .final-screen {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .final-screen h2 {
+            font-size: 2.5em;
+            color: #ff6347;
+            margin-bottom: 20px;
+        }
+
+        .final-screen .trophy {
+            font-size: 6em;
+            margin: 20px 0;
+        }
+
+        .key-insights {
+            background: linear-gradient(135deg, #fff8dc 0%, #ffecd2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: left;
+            border: 3px solid #ffa500;
+        }
+
+        .key-insights h3 {
+            color: #ff6347;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            text-align: center;
+        }
+
+        .key-insights ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-insights li {
+            padding: 12px 0;
+            padding-left: 40px;
+            position: relative;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+
+        .key-insights li:before {
+            content: "🍎";
+            position: absolute;
+            left: 0;
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .fruit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-row {
+                grid-template-columns: 1fr;
+            }
+
+            .fruit-option {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍎 The Fruit Basket 🍇</h1>
+            <p>How AI Slices Text into Tokens</p>
+        </div>
+
+        <div class="game-card" id="gameContent">
+            <!-- Content will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const gameState = {
+            currentLevel: 0,
+            score: 0,
+            correctAnswers: 0
+        };
+
+        const challenges = [
+            // LEVEL 1: Learning to Identify (Heavy Guidance) - 5 challenges
+            {
+                level: 1,
+                sentence: "cat",
+                correctFruits: ["🍎"],
+                explanation: "Simple, common English words are like apples - they fit perfectly as one token! AI recognizes 'cat' as a complete, frequently-used unit. This is the most efficient way to pack text.",
+                learning: "Common short words = single apples (most efficient!)",
+                hint: "Think simple! Common English words usually fit as one piece.",
+                guidance: "This is a basic, everyday English word. How many pieces would you need?"
+            },
+            {
+                level: 1,
+                sentence: "Hello",
+                correctFruits: ["🍎"],
+                explanation: "Another apple! 'Hello' is very common in the AI's training data, so it learned to treat it as one complete token. Common greetings, names, and everyday words get the apple treatment.",
+                learning: "Frequent words = efficient single tokens",
+                hint: "Very common greeting = probably one token!",
+                guidance: "Common greetings are used so often that AI remembers them as complete units."
+            },
+            {
+                level: 1,
+                sentence: "running",
+                correctFruits: ["🍎"],
+                explanation: "Even with the '-ing' ending, 'running' is common enough to be one apple! The AI has seen this word so frequently that it treats it as a single unit rather than breaking it into 'run' + 'ning'.",
+                learning: "Common verb forms = still single tokens",
+                hint: "This is a very common verb form in English.",
+                guidance: "Think about how often you see this word. Common = efficient!"
+            },
+            {
+                level: 1,
+                sentence: "AI",
+                correctFruits: ["🫐", "🫐"],
+                explanation: "Acronyms are like blueberries - tiny but they add up! Each letter 'A' and 'I' becomes its own token because 'AI' as a unit is less common in training data than you might think. Two letters = two blueberries.",
+                learning: "Acronyms split into letters = multiple blueberries",
+                hint: "Acronyms often split letter by letter. Count each character!",
+                guidance: "Acronyms are tricky - they usually break into individual letters."
+            },
+            {
+                level: 1,
+                sentence: "unprecedented",
+                correctFruits: ["🍇", "🍇", "🍇"],
+                explanation: "Long or uncommon words are like grape bunches - they need multiple pieces! 'un-preced-ented' splits into 3 tokens because the AI breaks unfamiliar words into recognizable chunks. Longer = more grapes needed.",
+                learning: "Long/rare words = multiple grapes",
+                hint: "This is a long, formal word. Think about word parts: 'un', 'preced', 'ented'.",
+                guidance: "Long or uncommon words get broken into smaller, recognizable pieces."
+            },
+            
+            // LEVEL 2: Using Knowledge (Some Guidance) - 5 challenges
+            {
+                level: 2,
+                sentence: "Hello world",
+                correctFruits: ["🍎", "🍎"],
+                explanation: "Two common words = two apples! Each word is frequent enough to be its own token. The space is included with 'world'. Notice how efficient English is - just two tokens for this famous phrase.",
+                learning: "Multiple common words = multiple apples (still efficient!)",
+                hint: "Two common English words...",
+                guidance: "Consider each word separately."
+            },
+            {
+                level: 2,
+                sentence: "unbelievable",
+                correctFruits: ["🍇", "🍇", "🍇"],
+                explanation: "Breaking down into parts: 'un-believ-able'. While 'believe' is common, this specific combination is less frequent, so AI splits it into recognizable chunks. Three parts = three grapes.",
+                learning: "Uncommon combinations split into familiar pieces",
+                hint: "Think about the word parts: prefix + root + suffix.",
+                guidance: "Even if parts are familiar, uncommon combinations still split up."
+            },
+            {
+                level: 2,
+                sentence: "Olá",
+                correctFruits: ["🍇", "🫐"],
+                explanation: "Now we see the inequality! Portuguese 'Olá' (hello) splits into 'Ol' (grape) and 'á' (blueberry) because the accented character is less common in training. Same meaning as English 'Hello' (1 apple), but uses MORE basket space!",
+                learning: "Non-English = less efficient (unfair!)",
+                hint: "The accent mark is unusual in the AI's training. It might be separate!",
+                guidance: "Accented characters often become their own tokens."
+            },
+            {
+                level: 2,
+                sentence: "COVID-19",
+                correctFruits: ["🫐", "🫐", "🫐", "🫐", "🫐", "🫐", "🫐", "🫐"],
+                explanation: "Mixed text with numbers and symbols = many blueberries! 'C-O-V-I-D---1-9' breaks into 8 individual tokens. Each capital letter, the hyphen, and each digit is separate. This is why technical terms are 'expensive'!",
+                learning: "Mixed formats = very inefficient",
+                hint: "Count every character: letters, hyphen, numbers - all separate!",
+                guidance: "Special characters and mixed formats split into individual pieces."
+            },
+            {
+                level: 2,
+                sentence: "café",
+                correctFruits: ["🍇", "🫐"],
+                explanation: "Even borrowed words with accents split up! 'caf' + 'é' = grape + blueberry. The accented 'é' is treated as special/uncommon. Compare to 'cafe' without accent (1 apple) - the accent makes it less efficient.",
+                learning: "Accents reduce efficiency even in English text",
+                hint: "The 'é' is not a standard English character...",
+                guidance: "Non-standard characters add complexity."
+            },
+            
+            // LEVEL 3: Demonstrating Understanding (Minimal Guidance) - 5 challenges
+            {
+                level: 3,
+                sentence: "こんにちは",
+                correctFruits: ["🍉", "🍉", "🍉", "🍉", "🍉"],
+                explanation: "Japanese = watermelons! Each character becomes a huge token. 5 characters = 5 watermelons, taking up massive basket space. Meanwhile 'Hello' = 1 apple. This creates real inequality: Japanese speakers can fit 5x less context in the same token limit!",
+                learning: "CJK languages = extremely inefficient (major inequality!)",
+                hint: "Each character is its own large token in Japanese.",
+                guidance: null
+            },
+            {
+                level: 3,
+                sentence: "GPT-4",
+                correctFruits: ["🫐", "🫐", "🫐", "🫐", "🫐"],
+                explanation: "Technical acronyms with numbers = all blueberries! 'G-P-T---4' splits into 5 tokens. Even though we see this everywhere now, in training data it wasn't common enough to be treated as one unit. Each character is separate.",
+                learning: "New technical terms remain inefficient",
+                hint: "Think about every single character...",
+                guidance: null
+            },
+            {
+                level: 3,
+                sentence: "🎉🎊🎈",
+                correctFruits: ["🍓", "🍓", "🍓"],
+                explanation: "Emojis = strawberries! Each emoji is exactly one token, regardless of which one. Three emojis = three tokens = same as three full words. They're 'expensive' because they use a full token but convey less meaning than words.",
+                learning: "Emojis = one token each (expensive for meaning provided)",
+                hint: "Each emoji...",
+                guidance: null
+            },
+            {
+                level: 3,
+                sentence: "Здравствуйте",
+                correctFruits: ["🍉", "🍉", "🍉", "🍉", "🍉", "🍉", "🍉"],
+                explanation: "Russian (Cyrillic) = watermelons! 'Hello' in Russian uses 7 watermelons vs English's 1 apple. Cyrillic characters are underrepresented in training, making them huge, inefficient tokens. This is systematic bias built into the AI.",
+                learning: "Non-Latin alphabets face severe inefficiency",
+                hint: "Cyrillic alphabet, unfamiliar to AI training...",
+                guidance: null
+            },
+            {
+                level: 3,
+                sentence: "artificial intelligence",
+                correctFruits: ["🍇", "🍇", "🍎"],
+                explanation: "Mixed efficiency! 'artificial' is less common, so it splits into 'artific' + 'ial' (two grapes). But 'intelligence' is frequent enough to stay whole (one apple). This shows how AI learns different frequencies for different words - even in the same phrase!",
+                learning: "Word frequency determines token size - even within one phrase",
+                hint: "One word is more common than the other...",
+                guidance: null
+            }
+        ];
+
+        const fruitTypes = {
+            "🍎": { name: "Apple", description: "Common English word (1 token)" },
+            "🍇": { name: "Grapes", description: "Word part/chunk (partial token)" },
+            "🫐": { name: "Blueberry", description: "Single character/letter" },
+            "🍉": { name: "Watermelon", description: "Non-English character (big!)" },
+            "🍓": { name: "Strawberry", description: "Emoji/special character" }
+        };
+
+        function showIntro() {
+            const content = document.getElementById('gameContent');
+            content.innerHTML = `
+                <div class="intro-screen">
+                    <h2>🧺 Welcome to the Fruit Basket!</h2>
+                    
+                    <div class="metaphor-explanation">
+                        <h3>🎯 The Metaphor</h3>
+                        <p style="font-size: 1.1em; line-height: 1.7;">
+                            Imagine AI has a <strong>basket</strong> (its token limit). Every piece of text you give it 
+                            must be sliced into <strong>fruits</strong> (tokens) that fit in the basket.
+                        </p>
+                        <p style="font-size: 1.1em; line-height: 1.7; margin-top: 15px;">
+                            Different types of text = different fruits with different sizes!
+                        </p>
+                    </div>
+
+                    <h3 style="color: #ff6347; margin: 25px 0;">🍎 Meet the Fruits (Token Types):</h3>
+                    
+                    <div class="fruit-grid">
+                        <div class="fruit-card">
+                            <div class="fruit-icon">🍎</div>
+                            <div class="fruit-name">Apple</div>
+                            <div class="fruit-description">Common English words fit perfectly as one token</div>
+                        </div>
+                        
+                        <div class="fruit-card">
+                            <div class="fruit-icon">🍇</div>
+                            <div class="fruit-name">Grapes</div>
+                            <div class="fruit-description">Parts of longer or uncommon words - you need several</div>
+                        </div>
+                        
+                        <div class="fruit-card">
+                            <div class="fruit-icon">🫐</div>
+                            <div class="fruit-name">Blueberry</div>
+                            <div class="fruit-description">Individual letters or special characters - tiny but add up!</div>
+                        </div>
+                        
+                        <div class="fruit-card">
+                            <div class="fruit-icon">🍉</div>
+                            <div class="fruit-name">Watermelon</div>
+                            <div class="fruit-description">Non-English characters - huge and inefficient!</div>
+                        </div>
+                        
+                        <div class="fruit-card">
+                            <div class="fruit-icon">🍓</div>
+                            <div class="fruit-name">Strawberry</div>
+                            <div class="fruit-description">Emojis - each one takes full space</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="startGame()" style="margin-top: 30px; padding: 20px 50px; font-size: 1.3em;">
+                        Start Packing Fruit! 🧺
+                    </button>
+                </div>
+            `;
+        }
+
+        function startGame() {
+            gameState.currentLevel = 0;
+            gameState.score = 0;
+            gameState.correctAnswers = 0;
+            showChallenge();
+        }
+
+        function showChallenge() {
+            if (gameState.currentLevel >= challenges.length) {
+                showFinalScreen();
+                return;
+            }
+
+            const challenge = challenges[gameState.currentLevel];
+            const content = document.getElementById('gameContent');
+            
+            // Determine which level we're in (1, 2, or 3)
+            const levelNum = challenge.level;
+            const levelColor = levelNum === 1 ? "#4caf50" : 
+                             levelNum === 2 ? "#ff9800" : 
+                             "#f44336";
+            
+            // Build guidance section if it exists
+            const guidanceHTML = challenge.guidance ? 
+                `<div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #2196f3;">
+                    <strong>💡 Guidance:</strong> ${challenge.guidance}
+                </div>` : '';
+            
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="display: inline-block; background: ${levelColor}; color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; font-weight: bold; margin-bottom: 10px;">
+                        LEVEL ${levelNum}
+                    </div>
+                    <div class="level-indicator">
+                        Challenge ${gameState.currentLevel + 1} of ${challenges.length}
+                    </div>
+                </div>
+
+                <div class="challenge-area">
+                    ${guidanceHTML}
+                    
+                    <h3 style="text-align: center; color: #ff6347; margin-bottom: 20px;">
+                        How many fruits does this text need?
+                    </h3>
+                    
+                    <div class="sentence-display">
+                        "${challenge.sentence}"
+                    </div>
+
+                    <p style="text-align: center; font-size: 1.2em; color: #666; margin-bottom: 20px;">
+                        Click fruits to add them to the basket:
+                    </p>
+
+                    <div class="fruit-selector" id="fruitSelector">
+                        <div class="fruit-option" onclick="addFruit('🍎')" title="Apple - common word">🍎</div>
+                        <div class="fruit-option" onclick="addFruit('🍇')" title="Grapes - word part">🍇</div>
+                        <div class="fruit-option" onclick="addFruit('🫐')" title="Blueberry - single character">🫐</div>
+                        <div class="fruit-option" onclick="addFruit('🍉')" title="Watermelon - non-English character">🍉</div>
+                        <div class="fruit-option" onclick="addFruit('🍓')" title="Strawberry - emoji">🍓</div>
+                    </div>
+
+                    <div class="basket">
+                        <div class="basket-contents" id="basketContents">
+                            <p style="color: rgba(255,255,255,0.6); text-align: center; width: 100%;">
+                                Empty basket - add fruits!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="basket-info">
+                        <div>Fruits in basket: <span class="basket-count" id="basketCount">0</span></div>
+                        <div style="font-size: 0.9em; color: #888; margin-top: 5px;" id="tokenHint">
+                            
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-secondary" onclick="clearBasket()" style="margin-right: 10px;">
+                            Clear Basket
+                        </button>
+                        <button class="btn btn-primary" onclick="checkBasket()" id="checkBtn" disabled>
+                            Check My Basket!
+                        </button>
+                        <button class="btn btn-secondary" onclick="showAnswer()" style="margin-left: 10px;">
+                            Show Answer
+                        </button>
+                    </div>
+
+                    <div class="feedback" id="feedback"></div>
+                    
+                    ${challenge.hint ? 
+                        `<div class="hint" style="margin-top: 20px;">
+                            <div class="hint-toggle" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="cursor: pointer; color: #ff9800; text-decoration: underline;">
+                                💡 Need a hint?
+                            </div>
+                            <div style="display:none; margin-top: 10px; padding: 15px; background: #fff3e0; border-radius: 8px;">
+                                ${challenge.hint}
+                            </div>
+                        </div>` : ''}
+                    
+                    <div class="explanation-box" id="explanationBox"></div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="scoreDisplay">${gameState.score}</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="correctDisplay">${gameState.correctAnswers}</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                </div>
+            `;
+
+            window.userBasket = [];
+            window.hasTriedOnce = false; // Track if player has attempted this challenge
+        }
+
+        function addFruit(fruit) {
+            window.userBasket.push(fruit);
+            updateBasketDisplay();
+        }
+
+        function updateBasketDisplay() {
+            const container = document.getElementById('basketContents');
+            const count = document.getElementById('basketCount');
+            const checkBtn = document.getElementById('checkBtn');
+            
+            if (window.userBasket.length === 0) {
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.6); text-align: center; width: 100%;">Empty basket - add fruits!</p>';
+                checkBtn.disabled = true;
+            } else {
+                container.innerHTML = window.userBasket.map((fruit, index) => 
+                    `<div class="fruit-token" onclick="removeFruit(${index})" title="Click to remove">${fruit}</div>`
+                ).join('');
+                checkBtn.disabled = false;
+            }
+            
+            count.textContent = window.userBasket.length;
+        }
+
+        function removeFruit(index) {
+            window.userBasket.splice(index, 1);
+            updateBasketDisplay();
+        }
+
+        function clearBasket() {
+            window.userBasket = [];
+            updateBasketDisplay();
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('explanationBox').classList.remove('show');
+        }
+
+        function checkBasket() {
+            const challenge = challenges[gameState.currentLevel];
+            const feedback = document.getElementById('feedback');
+            
+            const correct = JSON.stringify(window.userBasket) === JSON.stringify(challenge.correctFruits);
+            
+            if (correct) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = '🎉 Perfect! Your basket is packed correctly!';
+                gameState.score += 100;
+                gameState.correctAnswers++;
+                updateStats();
+                showExplanation();
+            } else {
+                // Show token hint after first incorrect attempt
+                if (!window.hasTriedOnce) {
+                    window.hasTriedOnce = true;
+                    const tokenHint = document.getElementById('tokenHint');
+                    tokenHint.innerHTML = `(AI needs <strong>${challenge.correctFruits.length}</strong> token${challenge.correctFruits.length > 1 ? 's' : ''} for this)`;
+                }
+                
+                feedback.className = 'feedback incorrect';
+                
+                // Check if it's a quantity issue or a type issue
+                if (window.userBasket.length !== challenge.correctFruits.length) {
+                    const userFruitWord = window.userBasket.length === 1 ? 'fruit' : 'fruits';
+                    const correctFruitWord = challenge.correctFruits.length === 1 ? 'fruit' : 'fruits';
+                    feedback.innerHTML = `❌ Not quite! Try again or click "Show Answer"<br><small>You have ${window.userBasket.length} ${userFruitWord}, but need ${challenge.correctFruits.length} ${correctFruitWord}</small>`;
+                } else {
+                    feedback.innerHTML = `❌ Right amount of fruits, but wrong types! Try again or click "Show Answer"<br><small>Hint: Check which fruits you're using</small>`;
+                }
+            }
+        }
+
+        function showAnswer() {
+            const challenge = challenges[gameState.currentLevel];
+            window.userBasket = [...challenge.correctFruits];
+            updateBasketDisplay();
+            
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = '💡 Here\'s the correct answer!';
+            
+            showExplanation();
+        }
+
+        function showExplanation() {
+            const challenge = challenges[gameState.currentLevel];
+            const box = document.getElementById('explanationBox');
+            
+            box.innerHTML = `
+                <h3>🎓 Why this packing?</h3>
+                <p style="font-size: 1.1em; line-height: 1.7; margin-bottom: 15px;">
+                    ${challenge.explanation}
+                </p>
+                <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #ff6347;">
+                    <strong style="color: #ff6347;">Key Learning:</strong> ${challenge.learning}
+                </div>
+                <button class="btn btn-primary" onclick="nextLevel()" style="margin-top: 25px; width: 100%; padding: 18px;">
+                    ${gameState.currentLevel < challenges.length - 1 ? 'Next Challenge →' : 'See Final Results 🏆'}
+                </button>
+            `;
+            
+            box.classList.add('show');
+        }
+
+        function nextLevel() {
+            gameState.currentLevel++;
+            showChallenge();
+        }
+
+        function updateStats() {
+            document.getElementById('scoreDisplay').textContent = gameState.score;
+            document.getElementById('correctDisplay').textContent = gameState.correctAnswers;
+        }
+
+        function showFinalScreen() {
+            const content = document.getElementById('gameContent');
+            
+            content.innerHTML = `
+                <div class="final-screen">
+                    <div class="trophy">🏆</div>
+                    <h2>Basket Master!</h2>
+                    <p style="font-size: 1.3em; color: #666; margin: 20px 0;">
+                        You've learned how AI packs text into tokens!
+                    </p>
+
+                    <div class="stats" style="margin: 30px 0;">
+                        <div class="stat">
+                            <div class="stat-value">${gameState.score}</div>
+                            <div class="stat-label">Final Score</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${gameState.correctAnswers}/${challenges.length}</div>
+                            <div class="stat-label">Correct</div>
+                        </div>
+                    </div>
+
+                    <div class="key-insights">
+                        <h3>🍎 The Fruit Basket Reveals:</h3>
+                        <ul>
+                            <li><strong>English = Apples:</strong> Common words fit efficiently as single tokens, like perfectly-sized apples in a basket</li>
+                            
+                            <li><strong>Rare Words = Grape Bunches:</strong> Uncommon or long words must be broken into multiple smaller pieces, taking up more basket space</li>
+                            
+                            <li><strong>Acronyms = Blueberries:</strong> Special characters and acronyms become many tiny tokens that add up quickly</li>
+                            
+                            <li><strong>Portuguese/Spanish = Mixed Fruits:</strong> Accented characters make words less efficient - "Olá" needs more space than "Hello"</li>
+                            
+                            <li><strong>Japanese/Chinese = Watermelons:</strong> These languages can use 3-5x more tokens (huge fruits!) for the same meaning as English</li>
+                            
+                            <li><strong>Emojis = Strawberries:</strong> Each emoji is its own token - expensive for the meaning they provide</li>
+                        </ul>
+                    </div>
+
+                    <div class="key-insights" style="background: linear-gradient(135deg, #ffe6e6 0%, #ffd6d6 100%); border-color: #ff6b6b;">
+                        <h3>⚖️ The Real-World Impact:</h3>
+                        <ul>
+                            <li><strong>Basket Size Limits Everyone:</strong> AI has fixed token limits (like 4K or 128K). But non-English speakers hit these limits much faster!</li>
+                            
+                            <li><strong>Unfair Costs:</strong> If you pay per token, Japanese speakers pay 3-5x more for the same conversation as English speakers</li>
+                            
+                            <li><strong>Performance Inequality:</strong> AI performs better with fewer, cleaner tokens (apples) than many messy ones (watermelons)</li>
+                            
+                            <li><strong>Limited Context:</strong> If your language uses watermelons (5 tokens per word), you can fit less text in the basket = less context for AI</li>
+                            
+                            <li><strong>Bias Built In:</strong> The basket itself favors English! It was designed around English text patterns, making other languages inherently less efficient</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-table">
+                        <div class="comparison-row header">
+                            <div>Text Example</div>
+                            <div>Basket Efficiency</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div><strong>"Hello"</strong> (English)</div>
+                            <div>🍎 = 1 token (perfect!)</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div><strong>"Olá"</strong> (Portuguese)</div>
+                            <div>🍇🫐 = 2 tokens (2x worse)</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div><strong>"こんにちは"</strong> (Japanese)</div>
+                            <div>🍉🍉🍉🍉🍉 = 5 tokens (5x worse!)</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showIntro()" style="margin-top: 30px; padding: 20px 40px; font-size: 1.2em;">
+                        Play Again 🔄
+                    </button>
+
+                    <div style="margin-top: 40px; padding: 25px; background: white; border-radius: 15px; border: 2px solid #ff6347;">
+                        <h3 style="color: #ff6347; margin-bottom: 15px; text-align: center;">📚 Want to Learn More About Tokenization?</h3>
+                        <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                            Explore these resources to deepen your understanding:
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: 10px; max-width: 600px; margin: 0 auto;">
+                            <a href="https://platform.openai.com/tokenizer" target="_blank" 
+                               style="padding: 12px 20px; background: #667eea; color: white; text-decoration: none; border-radius: 8px; text-align: center; font-weight: 600; transition: all 0.3s ease;">
+                                🔧 OpenAI Tokenizer Tool - Try it yourself!
+                            </a>
+                            <a href="https://platform.openai.com/docs/concepts/tokens" target="_blank" 
+                               style="padding: 12px 20px; background: #764ba2; color: white; text-decoration: none; border-radius: 8px; text-align: center; font-weight: 600; transition: all 0.3s ease;">
+                                📖 OpenAI Tokens Documentation
+                            </a>
+                            <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them" target="_blank" 
+                               style="padding: 12px 20px; background: #ff6347; color: white; text-decoration: none; border-radius: 8px; text-align: center; font-weight: 600; transition: all 0.3s ease;">
+                                💡 What are tokens and how to count them?
+                            </a>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 30px; color: #888; font-size: 0.95em;">
+                        Remember: The basket metaphor shows how tokenization creates real inequality in AI access and cost!
+                    </p>
+                </div>
+            `;
+        }
+
+        // Start the game
+        showIntro();
+    </script>
+</body>
+</html>
